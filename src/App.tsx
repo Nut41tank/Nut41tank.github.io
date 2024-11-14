@@ -11,10 +11,14 @@ function App() {
   useEffect(() => {
     console.log("start liff.init()...");
     liff
-      .init({ liffId: "" })
+      .init({ liffId: "2006554331-dY5v7Y7Y" })
       .then(() => {
         console.log("liff.init() done");
+        console.log("liff.getVersion()", liff.getVersion());
+        console.log("liff.getVersion()", liff.getAccessToken());
+        console.log("liff.getVersion()", liff.getIDToken());
         setLiffObject(liff);
+        if (liffObject?.ready) liffObject?.login({ redirectUri: "/" });
       })
       .catch((error) => {
         console.log(`liff.init() failed: ${error}`);
