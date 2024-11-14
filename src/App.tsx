@@ -17,8 +17,8 @@ function App() {
         console.log("liff.getVersion()", liff.getVersion());
         console.log("liff.getVersion()", liff.getAccessToken());
         console.log("liff.getVersion()", liff.getIDToken());
+        liff.login();
         setLiffObject(liff);
-        if (liffObject?.ready) liffObject?.login({ redirectUri: "/" });
       })
       .catch((error) => {
         console.log(`liff.init() failed: ${error}`);
