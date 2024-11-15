@@ -16,8 +16,8 @@ const handleDynamicMethod = (liff: Liff, propName: string) => {
   // Check if the property is a function
   if (typeof liffWithIndex[propName] === "function") {
     try {
-      if (propName === Object.getOwnPropertyNames(liff.login)[0]) return;
-      if (propName === Object.getOwnPropertyNames(liff.logout)[0]) return;
+      if (propName === "login") return;
+      if (propName === "logout") return;
       // Call the function and check if the return type is a string
       const result = liffWithIndex[propName]();
       if (typeof result === "string") {
@@ -58,6 +58,8 @@ function App() {
     liff
       .init({ liffId: "2006554331-dY5v7Y7Y" })
       .then(() => {
+        console.log("liff.init() succeeded");
+        console.log("liff", Object.keys(liff));
         setLiffObject(liff);
       })
       .catch((error) => {
