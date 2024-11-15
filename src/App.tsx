@@ -19,6 +19,22 @@ const handleDynamicMethod = (liff: Liff, propName: string) => {
       if (propName === "login") return;
       if (propName === "logout") return;
       // Call the function and check if the return type is a string
+      if (propName === "getProfile") {
+        let x = "";
+        liffWithIndex[propName]().then((profile) => {
+          console.log("The function returned a profile:", profile);
+          // Do something with the profile
+          x = JSON.stringify({
+            "profile.userId": profile.userId,
+            "profile.statusMessage": profile.statusMessage,
+            "profile.displayName": profile.displayName,
+            "profile.pictureUrl": profile.pictureUrl,
+          }); // Example: Get user ID
+        });
+        return x;
+      }
+      if (propName === "getProfilePlus")
+        return liffWithIndex[propName]()?.regionCode;
       const result = liffWithIndex[propName]();
       if (typeof result === "string") {
         console.log("The function returned a string:", result);
@@ -34,9 +50,25 @@ const handleDynamicMethod = (liff: Liff, propName: string) => {
     console.warn(`${propName} is not a function or does not exist.`);
   }
 };
+function parseJwt(token: string) {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split("")
+      .map(function (c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+
+  return JSON.parse(jsonPayload);
+}
 function App() {
   const [liffObject, setLiffObject] = useState<Liff>();
   const [liffError, setLiffError] = useState(null);
+  const [lifeProfile, setLifeProfile] = useState<string>("");
 
   const MyComponent = (props: x) => {
     // You can destructure props if you have multiple
@@ -49,6 +81,7 @@ function App() {
             {propName} :{handleDynamicMethod(display, propName)}
           </p>
         ))}
+        <p>JWT : {lifeProfile}</p>
       </div>
     );
   };
@@ -61,6 +94,9 @@ function App() {
         console.log("liff.init() succeeded");
         console.log("liff", Object.keys(liff));
         setLiffObject(liff);
+        if (liffObject?.isLoggedIn) {
+          setLifeProfile(parseJwt(liffObject.getIDToken()!));
+        }
       })
       .catch((error) => {
         console.log(`liff.init() failed: ${error}`);
