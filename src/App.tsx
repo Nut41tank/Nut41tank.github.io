@@ -113,6 +113,7 @@ function App() {
             liffObject.getDecodedIDToken()
           );
           const decodedToken = liffObject.getDecodedIDToken;
+          console.log("decodedToken email", decodedToken()?.email);
 
           // Ensure the returned value is an object
           if (typeof decodedToken === "object" && decodedToken !== null) {
