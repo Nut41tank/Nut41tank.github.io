@@ -8,6 +8,19 @@ interface x {
 interface LiffWithIndex extends Liff {
   [key: string]: any; // Allows accessing properties using string keys
 }
+interface JWT {
+  iss?: string;
+  sub?: string;
+  aud?: string;
+  exp?: number;
+  iat?: number;
+  auth_time?: number;
+  nonce?: string;
+  amr?: string[];
+  name?: string;
+  picture?: string;
+  email?: string;
+}
 const liffWithIndex: LiffWithIndex = liff;
 
 const handleDynamicMethod = (liff: Liff, propName: string) => {
@@ -95,7 +108,38 @@ function App() {
         console.log("liff", Object.keys(liff));
         setLiffObject(liff);
         if (liffObject?.isLoggedIn) {
-          setLifeProfile(parseJwt(liffObject.getIDToken()!));
+          console.log(
+            "liffObject.getDecodedIDToken",
+            liffObject.getDecodedIDToken()
+          );
+          const decodedToken = liffObject.getDecodedIDToken;
+
+          // Ensure the returned value is an object
+          if (typeof decodedToken === "object" && decodedToken !== null) {
+            // Iterate over the keys of the object
+            const stringifiedResult = Object.keys(decodedToken).reduce(
+              (result, key) => {
+                // Use dynamic property access
+                const value = decodedToken[key as keyof typeof decodedToken];
+
+                // Stringify the value and store it in the result
+                result[key] = JSON.stringify(value);
+                return result;
+              },
+              {} as Record<string, string>
+            );
+
+            console.log("Stringified Result:", stringifiedResult);
+
+            // Optionally, stringify the entire result object
+            const entireStringifiedObject = JSON.stringify(stringifiedResult);
+            console.log("Entire Stringified Object:", entireStringifiedObject);
+
+            // Update state or handle the stringified object
+            setLifeProfile(entireStringifiedObject);
+          } else {
+            console.warn("getDecodedIDToken did not return an object.");
+          }
         }
       })
       .catch((error) => {
