@@ -108,7 +108,9 @@ function App() {
         console.log("liff", Object.keys(liff));
         console.log("liffObject", liffObject);
         console.log("liffObject email", liffObject?.getDecodedIDToken()?.email);
-        console.log("liffObject email", liff?.getDecodedIDToken()?.email);
+        console.log("liff email", liff?.getDecodedIDToken()?.email);
+        console.log("liff email", JSON.stringify(liff?.getDecodedIDToken()));
+        console.log("liff name", liff?.getDecodedIDToken()?.name);
         setLiffObject(liff);
         if (liffObject?.isLoggedIn()) {
           console.log(
