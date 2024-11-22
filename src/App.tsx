@@ -118,7 +118,6 @@ function App() {
             "https://nut41tank.github.io/?ref=5000"
           )
         );
-        if (liffObject?.isLoggedIn) {
         if (liffObject?.isLoggedIn()) {
           console.log(
             "liffObject.getDecodedIDToken",
