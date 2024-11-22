@@ -107,13 +107,19 @@ function App() {
         console.log("liff.init() succeeded");
         console.log("liff", Object.keys(liff));
         setLiffObject(liff);
+        console.log(
+          "liff url",
+          liff.permanentLink.createUrlBy(
+            "https://nut41tank.github.io/?ref=5000"
+          )
+        );
         if (liffObject?.isLoggedIn) {
           console.log(
             "liffObject.getDecodedIDToken",
             liffObject.getDecodedIDToken()
           );
           const decodedToken = liffObject.getDecodedIDToken;
-          console.log("decodedToken email", decodedToken()?.email);
+          console.log("decodedToken email", decodedToken()?.name);
 
           // Ensure the returned value is an object
           if (typeof decodedToken === "object" && decodedToken !== null) {
